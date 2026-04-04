@@ -18,6 +18,7 @@ import Profile from "./pages/customer/Profile";
 import Users from "./pages/admin/Users";
 import AdminDrivers from "./pages/admin/Drivers";
 import Analytics from "./pages/admin/Analytics";
+import AdminMaintenance from "./pages/admin/AdminMaintenance"; // ✅ NEW
 
 // Manager Pages
 import Fleet from "./pages/manager/Fleet";
@@ -27,12 +28,13 @@ import Maintenance from "./pages/manager/Maintenance";
 import Reports from "./pages/manager/Reports";
 import FleetInventoryPage from "./pages/FleetInventoryPage";
 
-import CustomerBookingPage from "./pages/customer/CustomerBookingPage";
+// Driver Pages
 import MyTripsDriver from "./pages/driver/MyTripsDriver";
 import Earnings from "./pages/driver/Earnings";
 import Schedule from "./pages/driver/Schedule";
 import DriverProfile from "./pages/driver/DriverProfile";
 import RouteNavigation from "./pages/driver/RouteNavigation";
+import DriverMaintenance from "./pages/driver/DriverMaintenance"; // ✅ NEW
 
 function App() {
   return (
@@ -40,57 +42,39 @@ function App() {
       <Routes>
         <Route path="/" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
+
+        {/* Admin Routes */}
+        <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         <Route path="/admin/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
         <Route path="/admin/drivers" element={<ProtectedRoute><AdminDrivers /></ProtectedRoute>} />
         <Route path="/admin/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-        <Route
-          path="/manager"
-          element={
-            <ProtectedRoute>
-              <FleetManagerDashboard />
-            </ProtectedRoute>
-          }
-        />
+        {/* ✅ NEW */}
+        <Route path="/admin/maintenance" element={<ProtectedRoute><AdminMaintenance /></ProtectedRoute>} />
+
+        {/* Manager Routes */}
+        <Route path="/manager" element={<ProtectedRoute><FleetManagerDashboard /></ProtectedRoute>} />
         <Route path="/manager/fleet" element={<ProtectedRoute><Fleet /></ProtectedRoute>} />
         <Route path="/manager/drivers" element={<ProtectedRoute><ManagerDrivers /></ProtectedRoute>} />
         <Route path="/manager/trips" element={<ProtectedRoute><Trips /></ProtectedRoute>} />
         <Route path="/manager/maintenance" element={<ProtectedRoute><Maintenance /></ProtectedRoute>} />
         <Route path="/manager/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
         <Route path="/fleet-inventory" element={<ProtectedRoute><FleetInventoryPage /></ProtectedRoute>} />
-        <Route
-          path="/driver"
-          element={
-            <ProtectedRoute>
-              <DriverDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/driver/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+
+        {/* Driver Routes */}
+        <Route path="/driver" element={<ProtectedRoute><DriverDashboard /></ProtectedRoute>} />
         <Route path="/driver/my-trips" element={<ProtectedRoute><MyTripsDriver /></ProtectedRoute>} />
         <Route path="/driver/earnings" element={<ProtectedRoute><Earnings /></ProtectedRoute>} />
         <Route path="/driver/schedule" element={<ProtectedRoute><Schedule /></ProtectedRoute>} />
         <Route path="/driver/profile" element={<ProtectedRoute><DriverProfile /></ProtectedRoute>} />
         <Route path="/driver/navigation" element={<ProtectedRoute><RouteNavigation /></ProtectedRoute>} />
-        <Route
-          path="/customer"
-          element={
-            <ProtectedRoute>
-              <CustomerDashboard />
-            </ProtectedRoute>
-          }
-        />
+        {/* ✅ NEW */}
+        <Route path="/driver/maintenance" element={<ProtectedRoute><DriverMaintenance /></ProtectedRoute>} />
+
+        {/* Customer Routes */}
+        <Route path="/customer" element={<ProtectedRoute><CustomerDashboard /></ProtectedRoute>} />
         <Route path="/customer/my-trips" element={<ProtectedRoute><MyTrips /></ProtectedRoute>} />
         <Route path="/customer/my-bookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
         <Route path="/customer/plan-trip" element={<ProtectedRoute><PlanTrip /></ProtectedRoute>} />
-        <Route path="/customer/book" element={<ProtectedRoute><CustomerBookingPage /></ProtectedRoute>} />
         <Route path="/customer/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       </Routes>
     </Router>

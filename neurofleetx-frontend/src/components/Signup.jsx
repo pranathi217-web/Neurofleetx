@@ -15,6 +15,7 @@ function Signup() {
     city: "",
     aadhar: "",
     license: "",
+    vehicleId: "",
     company: "",
     adminRegNo: ""
   });
@@ -166,6 +167,24 @@ function Signup() {
                   value={formData.phone}
                   onChange={handleChange}
                 />
+                {/* ✅ NEW: Vehicle ID for drivers */}
+                <input
+                  type="number"
+                  name="vehicleId"
+                  placeholder="Assigned Vehicle ID (given by Fleet Manager)"
+                  required
+                  value={formData.vehicleId}
+                  onChange={handleChange}
+                />
+                <small style={{
+                  color: '#888',
+                  fontSize: '0.78rem',
+                  marginTop: '-0.5rem',
+                  display: 'block',
+                  paddingLeft: '0.25rem'
+                }}>
+                  ℹ️ Ask your Fleet Manager for your Vehicle ID before registering.
+                </small>
               </>
             )}
 

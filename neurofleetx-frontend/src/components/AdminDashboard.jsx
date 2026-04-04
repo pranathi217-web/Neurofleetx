@@ -50,6 +50,8 @@ function AdminDashboard() {
           <li onClick={() => navigate("/admin/users")}>Users</li>
           <li onClick={() => navigate("/admin/drivers")}>Drivers</li>
           <li onClick={() => navigate("/admin/analytics")}>Analytics</li>
+          {/* ✅ NEW: Maintenance link added */}
+          <li onClick={() => navigate("/admin/maintenance")}>Maintenance</li>
         </ul>
         <button className="logout-btn" onClick={handleLogout}>Logout</button>
       </nav>
@@ -137,6 +139,8 @@ function AdminDashboard() {
             <button className="action-btn primary" onClick={() => navigate("/admin/users")}>Add New User</button>
             <button className="action-btn secondary" onClick={() => navigate("/admin/drivers")}>Manage Drivers</button>
             <button className="action-btn secondary" onClick={() => navigate("/admin/analytics")}>View Reports</button>
+            {/* ✅ NEW: Quick action for Maintenance */}
+            <button className="action-btn secondary" onClick={() => navigate("/admin/maintenance")}>🔧 Maintenance</button>
           </div>
         </div>
 

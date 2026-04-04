@@ -24,11 +24,13 @@ function Login() {
       const userId = response.data.userId; // Get user ID from backend
       
       // Store JWT token and user info
-      localStorage.setItem("token", token);
-      localStorage.setItem("role", userRole);
-      localStorage.setItem("userName", userName);
-      localStorage.setItem("userEmail", userEmail);
-      localStorage.setItem("userId", userId);
+     localStorage.setItem("token", token);
+localStorage.setItem("role", userRole);
+localStorage.setItem("userName", userName);
+localStorage.setItem("userEmail", userEmail);
+localStorage.setItem("userId", userId);
+// ✅ ADD THIS LINE
+if (response.data.vehicleId) localStorage.setItem("vehicleId", response.data.vehicleId);
 
       console.log("✅ JWT Token received:", token);
       console.log("✅ User:", userName, userEmail);
@@ -39,7 +41,7 @@ function Login() {
 
       // Role-based redirect using database role
       if (userRole === "ADMIN") navigate("/admin");
-      else if (userRole === "MANAGER") navigate("/manager");
+      else if (userRole === "MANAGER" || userRole === "FLEET_MANAGER") navigate("/manager");
       else if (userRole === "DRIVER") navigate("/driver");
       else if (userRole === "CUSTOMER") navigate("/customer");
       else navigate("/");

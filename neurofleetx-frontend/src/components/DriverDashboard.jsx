@@ -85,9 +85,6 @@ function DriverDashboard() {
     try {
       const trip = await tripService.getActiveTrip(userId);
       setActiveTrip(trip);
-      if (trip) {
-        setOnShift(true);
-      }
     } catch (error) {
       console.error('Error fetching active trip:', error);
     }
@@ -95,72 +92,36 @@ function DriverDashboard() {
 
   const handleStartTrip = async () => {
     if (!assignedVehicle) {
-      toast.error('❌ No vehicle assigned to you', {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error('❌ No vehicle assigned to you', { position: "top-right", autoClose: 3000 });
       return;
     }
-
     if (assignedVehicle.status === 'MAINTENANCE') {
-      toast.error('❌ Vehicle is under maintenance. Cannot start trip.', {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error('❌ Vehicle is under maintenance. Cannot start trip.', { position: "top-right", autoClose: 3000 });
       return;
     }
-
     try {
       const trip = await tripService.startTrip(driverId, assignedVehicle.id);
       setActiveTrip(trip);
-      toast.success('✅ Trip started successfully!', {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      
-      // Refresh vehicle status
+      toast.success('✅ Trip started successfully!', { position: "top-right", autoClose: 3000 });
       fetchAssignedVehicle(driverId);
     } catch (error) {
-      toast.error(`❌ ${error.message}`, {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error(`❌ ${error.message}`, { position: "top-right", autoClose: 3000 });
     }
   };
 
   const handleEndTrip = async () => {
     if (!activeTrip) {
-      toast.error('❌ No active trip to end', {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error('❌ No active trip to end', { position: "top-right", autoClose: 3000 });
       return;
     }
-
     try {
       await tripService.endTrip(activeTrip.id);
       setActiveTrip(null);
-      toast.success('✅ Trip ended successfully!', {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      
-      // Refresh vehicle status
+      toast.success('✅ Trip ended successfully!', { position: "top-right", autoClose: 3000 });
       fetchAssignedVehicle(driverId);
     } catch (error) {
-      toast.error(`❌ ${error.message}`, {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error(`❌ ${error.message}`, { position: "top-right", autoClose: 3000 });
     }
-  };
-
-  const handleViewSchedule = () => {
-    navigate("/driver/schedule");
-  };
-
-  const handleEarningsReport = () => {
-    navigate("/driver/earnings");
   };
 
   const handleLogout = () => {
@@ -178,6 +139,8 @@ function DriverDashboard() {
           <li onClick={() => navigate("/driver/navigation")}>Route Navigation</li>
           <li onClick={() => navigate("/driver/earnings")}>Earnings</li>
           <li onClick={() => navigate("/driver/schedule")}>Schedule</li>
+          {/* ✅ NEW: Vehicle Health link added */}
+          <li onClick={() => navigate("/driver/maintenance")}>Vehicle Health</li>
           <li onClick={() => navigate("/driver/profile")}>Profile</li>
         </ul>
         <button className="logout-btn" onClick={handleLogout}>Logout</button>
@@ -231,17 +194,25 @@ function DriverDashboard() {
                 )}
               </div>
               <div className="trip-controls">
+                {/* ✅ NEW: Quick link to vehicle health from vehicle card */}
+                <button
+                  className="action-btn secondary"
+                  style={{ marginBottom: '0.5rem', width: '100%' }}
+                  onClick={() => navigate("/driver/maintenance")}
+                >
+                  🔧 Check Vehicle Health
+                </button>
                 {!activeTrip ? (
-                  <button 
-                    className="action-btn primary trip-btn" 
+                  <button
+                    className="action-btn primary trip-btn"
                     onClick={handleStartTrip}
                     disabled={assignedVehicle.status === 'MAINTENANCE'}
                   >
                     🚀 Start Trip
                   </button>
                 ) : (
-                  <button 
-                    className="action-btn danger trip-btn" 
+                  <button
+                    className="action-btn danger trip-btn"
                     onClick={handleEndTrip}
                   >
                     🏁 End Trip
@@ -266,7 +237,6 @@ function DriverDashboard() {
               <p>Today's Earnings</p>
             </div>
           </div>
-
           <div className="stat-card">
             <div className="stat-icon">🚗</div>
             <div className="stat-info">
@@ -274,7 +244,6 @@ function DriverDashboard() {
               <p>Total Trips</p>
             </div>
           </div>
-
           <div className="stat-card">
             <div className="stat-icon">⭐</div>
             <div className="stat-info">
@@ -282,7 +251,6 @@ function DriverDashboard() {
               <p>Rating</p>
             </div>
           </div>
-
           <div className="stat-card">
             <div className="stat-icon">✅</div>
             <div className="stat-info">
@@ -290,7 +258,6 @@ function DriverDashboard() {
               <p>Completed Trips</p>
             </div>
           </div>
-
           <div className="stat-card">
             <div className="stat-icon">⏰</div>
             <div className="stat-info">
@@ -298,7 +265,6 @@ function DriverDashboard() {
               <p>Hours Online</p>
             </div>
           </div>
-
           <div className="stat-card">
             <div className="stat-icon">💰</div>
             <div className="stat-info">
@@ -332,8 +298,10 @@ function DriverDashboard() {
         <div className="actions-section">
           <h2>Quick Actions</h2>
           <div className="action-buttons">
-            <button className="action-btn secondary" onClick={handleViewSchedule}>View Schedule</button>
-            <button className="action-btn secondary" onClick={handleEarningsReport}>Earnings Report</button>
+            <button className="action-btn secondary" onClick={() => navigate("/driver/schedule")}>View Schedule</button>
+            <button className="action-btn secondary" onClick={() => navigate("/driver/earnings")}>Earnings Report</button>
+            {/* ✅ NEW: Quick action for vehicle health */}
+            <button className="action-btn secondary" onClick={() => navigate("/driver/maintenance")}>🔧 Vehicle Health</button>
           </div>
         </div>
 
@@ -367,7 +335,7 @@ function DriverDashboard() {
           </div>
         </div>
       </div>
-      
+
       <ToastContainer />
     </div>
   );
