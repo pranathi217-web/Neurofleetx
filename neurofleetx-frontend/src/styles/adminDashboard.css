@@ -245,16 +245,17 @@
 }
 
 .revenue-chart {
-  padding: 1rem;
+  padding: 1rem 0;
 }
 
 .chart-bars {
   display: flex;
   align-items: flex-end;
   justify-content: space-around;
-  height: 250px;
+  height: 200px;
   gap: 1rem;
-  padding: 1rem 0;
+  padding: 0 1rem;
+  border-bottom: 2px solid #dee2e6;
 }
 
 .bar-container {
@@ -262,37 +263,35 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  height: 100%;
 }
 
 .bar {
   width: 100%;
   background: linear-gradient(180deg, #0d6efd 0%, #0b5ed7 100%);
-  border-radius: 8px 8px 0 0;
-  position: relative;
-  min-height: 20px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 0.5rem;
+  border-radius: 6px 6px 0 0;
+  min-height: 4px;
   transition: all 0.3s;
 }
 
 .bar:hover {
   background: linear-gradient(180deg, #0b5ed7 0%, #0a58ca 100%);
-  transform: scaleY(1.05);
+  transform: scaleY(1.03);
 }
 
 .bar-value {
-  color: white;
   font-size: 0.75rem;
   font-weight: 600;
+  color: #0d6efd;
 }
 
 .bar-label {
   color: #666;
   font-size: 0.85rem;
   font-weight: 500;
+  margin-top: 0.4rem;
 }
 
 .activity-list {

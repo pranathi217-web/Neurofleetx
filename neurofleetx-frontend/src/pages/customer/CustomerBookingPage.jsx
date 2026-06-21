@@ -80,26 +80,60 @@ export default function CustomerBookingPage() {
   const anyFilterActive = filters.type || filters.seats || filters.ev;
   const recommendedCount = rankedVehicles.filter(v => v.isRecommended).length;
 
-  return (
-    <div className="page-container">
-      <div className="page-header">
-        <button onClick={() => navigate('/customer')} className="back-btn">← Back</button>
-        <h1>Book a Vehicle</h1>
-      </div>
+  const userName = localStorage.getItem("userName") || "Customer";
 
-      <div className="booking-layout">
-        <FilterPanel filters={filters} onChange={setFilters} />
-        <main className="booking-main">
-          <div className="booking-result-bar">
-            <p className="booking-result-count">
-              {rankedVehicles.length} vehicle{rankedVehicles.length !== 1 ? 's' : ''} available
-            </p>
-            {anyFilterActive && recommendedCount > 0 && (
-              <span className="rec-hint">⭐ Top {recommendedCount} recommended based on your filters</span>
-            )}
-          </div>
-          <VehicleList vehicles={rankedVehicles} />
-        </main>
+  return (
+    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)" }}>
+      {/* Navbar matching CustomerDashboard */}
+      <nav style={{
+        background: "#fff", padding: "1rem 2rem", display: "flex",
+        alignItems: "center", justifyContent: "space-between",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.08)"
+      }}>
+        <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "#198754" }}>NeuroFleetX</div>
+        <ul style={{ display: "flex", listStyle: "none", gap: "2rem", margin: 0, padding: 0 }}>
+          {[
+            { label: "Dashboard", path: "/customer" },
+            { label: "Plan Trip and Book", path: "/customer/plan-trip" },
+            { label: "My Bookings", path: "/customer/my-bookings" },
+            { label: "My Trips", path: "/customer/my-trips" },
+            { label: "Profile", path: "/customer/profile" },
+          ].map(({ label, path }) => (
+            <li key={label} onClick={() => navigate(path)}
+              style={{ cursor: "pointer", color: "#555", fontWeight: 500,
+                color: path === "/customer/plan-trip" ? "#198754" : "#555" }}>
+              {label}
+            </li>
+          ))}
+        </ul>
+        <span style={{ fontWeight: 600, color: "#198754" }}>👤 {userName}</span>
+      </nav>
+
+      <div style={{ padding: "2rem" }}>
+        <div style={{
+          background: "white", borderRadius: "12px", padding: "1rem 2rem",
+          marginBottom: "1.5rem", display: "flex", alignItems: "center",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.08)"
+        }}>
+          <button onClick={() => navigate('/customer')} className="back-btn"
+            style={{ marginRight: "1rem" }}>← Back</button>
+          <h1 style={{ margin: 0, fontSize: "1.8rem", color: "#1a1a1a" }}>Book a Vehicle</h1>
+        </div>
+
+        <div className="booking-layout">
+          <FilterPanel filters={filters} onChange={setFilters} />
+          <main className="booking-main">
+            <div className="booking-result-bar">
+              <p className="booking-result-count">
+                {rankedVehicles.length} vehicle{rankedVehicles.length !== 1 ? 's' : ''} available
+              </p>
+              {anyFilterActive && recommendedCount > 0 && (
+                <span className="rec-hint">⭐ Top {recommendedCount} recommended based on your filters</span>
+              )}
+            </div>
+            <VehicleList vehicles={rankedVehicles} />
+          </main>
+        </div>
       </div>
     </div>
   );

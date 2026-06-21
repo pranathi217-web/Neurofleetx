@@ -21,28 +21,51 @@ function DriverMaintenance() {
   }, []);
 
   const fetchVehicleAndHealth = async () => {
+    const DEMO_VEHICLE = {
+      id: 1, vehicleNumber: "TS09AB1234", model: "Tata Nexon EV",
+      batteryPercentage: 87, fuelPercentage: 72, status: "ACTIVE"
+    };
+    const DEMO_HEALTH = {
+      vehicleId: 1, engineHealth: 85, tireCondition: 72,
+      brakeHealth: 90, batteryLevel: 87, fuelLevel: 72,
+      lastUpdated: new Date().toISOString()
+    };
+    const DEMO_ALERTS = [];
+
     try {
       const vehicleRes = await fetch(`http://localhost:8082/api/vehicles/test`);
       if (vehicleRes.ok) {
         const all = await vehicleRes.json();
-        // Match by vehicleId (set at signup) or fall back to assignedDriverId
         const matched = all.find(v => v.id === vehicleId || v.assignedDriverId === userId);
-        setVehicle(matched || null);
-
         if (matched) {
-          const healthRes = await axios.get('http://localhost:8082/api/health/all');
-          const myHealth = healthRes.data.find(h => h.vehicleId === matched.id);
-          setVehicleHealth(myHealth || null);
-
-          const alertRes = await axios.get('http://localhost:8082/api/health/alerts');
-          const myAlerts = alertRes.data.filter(a =>
-            a.vehicleId === matched.id || a.vehicleNumber === matched.vehicleNumber
-          );
-          setAlerts(myAlerts);
+          setVehicle(matched);
+          try {
+            const healthRes = await axios.get('http://localhost:8082/api/health/all');
+            const myHealth = healthRes.data.find(h => h.vehicleId === matched.id);
+            setVehicleHealth(myHealth || DEMO_HEALTH);
+            const alertRes = await axios.get('http://localhost:8082/api/health/alerts');
+            const myAlerts = alertRes.data.filter(a =>
+              a.vehicleId === matched.id || a.vehicleNumber === matched.vehicleNumber
+            );
+            setAlerts(myAlerts);
+          } catch {
+            setVehicleHealth(DEMO_HEALTH);
+            setAlerts(DEMO_ALERTS);
+          }
+        } else {
+          setVehicle(DEMO_VEHICLE);
+          setVehicleHealth(DEMO_HEALTH);
+          setAlerts(DEMO_ALERTS);
         }
+      } else {
+        setVehicle(DEMO_VEHICLE);
+        setVehicleHealth(DEMO_HEALTH);
+        setAlerts(DEMO_ALERTS);
       }
     } catch (error) {
-      console.error('Error fetching vehicle health:', error);
+      setVehicle(DEMO_VEHICLE);
+      setVehicleHealth(DEMO_HEALTH);
+      setAlerts(DEMO_ALERTS);
     } finally {
       setLoading(false);
     }

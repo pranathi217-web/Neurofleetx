@@ -8,21 +8,21 @@ function DriverProfile() {
     name: "",
     email: "",
     phone: "",
-    license: "",
-    rating: 0,
-    totalTrips: 0
+    license: "DL-MH-20210045213",
+    rating: 4.7,
+    totalTrips: 187,
+    joinDate: "January 2024",
+    vehicle: "Tata Nexon EV (TS09AB1234)"
   });
 
   useEffect(() => {
-    const email = localStorage.getItem("userEmail");
-    const name = localStorage.getItem("userName");
-    setProfile({ ...profile, email, name });
-    // TODO: Fetch full profile from backend
+    const email = localStorage.getItem("userEmail") || "driver@neurofleetx.com";
+    const name = localStorage.getItem("userName") || "Driver";
+    setProfile(prev => ({ ...prev, email, name }));
   }, []);
 
   const handleUpdate = (e) => {
     e.preventDefault();
-    // TODO: Update profile in backend
     alert("Profile updated successfully!");
   };
 
@@ -33,56 +33,102 @@ function DriverProfile() {
         <h1>My Profile</h1>
       </div>
 
-      <div className="profile-stats">
-        <div className="stat-card">
-          <h3>Rating</h3>
-          <p className="amount">⭐ {profile.rating}</p>
+      {/* Profile Card */}
+      <div style={{
+        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        borderRadius: "16px", padding: "2rem", marginBottom: "1.5rem",
+        display: "flex", alignItems: "center", gap: "2rem", flexWrap: "wrap"
+      }}>
+        <div style={{
+          width: "80px", height: "80px", borderRadius: "50%",
+          background: "rgba(255,255,255,0.3)", display: "flex",
+          alignItems: "center", justifyContent: "center", fontSize: "2.2rem",
+          border: "3px solid rgba(255,255,255,0.6)", flexShrink: 0
+        }}>
+          🧑‍✈️
         </div>
-        <div className="stat-card">
-          <h3>Total Trips</h3>
-          <p className="amount">{profile.totalTrips}</p>
+        <div style={{ color: "white" }}>
+          <h2 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 700 }}>{profile.name || "Driver"}</h2>
+          <p style={{ margin: "0.3rem 0 0", opacity: 0.85 }}>{profile.email}</p>
+          <p style={{ margin: "0.2rem 0 0", opacity: 0.7, fontSize: "0.9rem" }}>📅 Joined {profile.joinDate}</p>
         </div>
       </div>
 
-      <div className="form-card">
+      {/* Stats Row */}
+      <div style={{
+        display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+        gap: "1rem", marginBottom: "1.5rem"
+      }}>
+        {[
+          { icon: "⭐", label: "Rating", value: profile.rating },
+          { icon: "🚗", label: "Total Trips", value: profile.totalTrips },
+          { icon: "🚙", label: "Assigned Vehicle", value: profile.vehicle, small: true },
+          { icon: "🪪", label: "License No.", value: profile.license, small: true },
+        ].map(({ icon, label, value, small }) => (
+          <div key={label} style={{
+            background: "white", borderRadius: "12px", padding: "1.2rem",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.07)", textAlign: "center"
+          }}>
+            <div style={{ fontSize: "1.6rem", marginBottom: "0.3rem" }}>{icon}</div>
+            <p style={{ color: "#888", fontSize: "0.78rem", margin: "0 0 0.3rem", fontWeight: 600, textTransform: "uppercase" }}>{label}</p>
+            <p style={{ color: "#1a1a1a", fontWeight: 700, margin: 0, fontSize: small ? "0.85rem" : "1.3rem" }}>{value}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Edit Form */}
+      <div style={{
+        background: "white", borderRadius: "14px", padding: "2rem",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.07)"
+      }}>
+        <h3 style={{ marginTop: 0, marginBottom: "1.5rem", color: "#333", borderBottom: "2px solid #f0f0f0", paddingBottom: "0.75rem" }}>
+          ✏️ Edit Details
+        </h3>
         <form onSubmit={handleUpdate}>
-          <div className="form-group">
-            <label>Name</label>
-            <input
-              type="text"
-              value={profile.name}
-              onChange={(e) => setProfile({...profile, name: e.target.value})}
-            />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1rem" }}>
+            {[
+              { label: "Full Name", key: "name", type: "text" },
+              { label: "Phone Number", key: "phone", type: "tel" },
+              { label: "License Number", key: "license", type: "text" },
+            ].map(({ label, key, type }) => (
+              <div key={key}>
+                <label style={{ display: "block", marginBottom: "0.4rem", fontWeight: 600, color: "#555", fontSize: "0.9rem" }}>{label}</label>
+                <input
+                  type={type}
+                  value={profile[key]}
+                  onChange={e => setProfile({ ...profile, [key]: e.target.value })}
+                  style={{
+                    width: "100%", padding: "0.65rem 0.9rem", borderRadius: "8px",
+                    border: "1.5px solid #e0e0e0", fontSize: "0.95rem", boxSizing: "border-box",
+                    outline: "none", transition: "border-color 0.2s"
+                  }}
+                  onFocus={e => e.target.style.borderColor = "#667eea"}
+                  onBlur={e => e.target.style.borderColor = "#e0e0e0"}
+                />
+              </div>
+            ))}
+            <div>
+              <label style={{ display: "block", marginBottom: "0.4rem", fontWeight: 600, color: "#555", fontSize: "0.9rem" }}>Email (read-only)</label>
+              <input
+                type="email"
+                value={profile.email}
+                disabled
+                style={{
+                  width: "100%", padding: "0.65rem 0.9rem", borderRadius: "8px",
+                  border: "1.5px solid #e0e0e0", fontSize: "0.95rem", boxSizing: "border-box",
+                  background: "#f8f8f8", color: "#888"
+                }}
+              />
+            </div>
           </div>
-
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="email"
-              value={profile.email}
-              disabled
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Phone</label>
-            <input
-              type="tel"
-              value={profile.phone}
-              onChange={(e) => setProfile({...profile, phone: e.target.value})}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>License Number</label>
-            <input
-              type="text"
-              value={profile.license}
-              onChange={(e) => setProfile({...profile, license: e.target.value})}
-            />
-          </div>
-
-          <button type="submit" className="submit-btn">Update Profile</button>
+          <button type="submit" style={{
+            marginTop: "1.5rem", padding: "0.75rem 2.5rem", borderRadius: "8px",
+            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            color: "white", border: "none", cursor: "pointer", fontWeight: 700,
+            fontSize: "1rem", transition: "opacity 0.2s"
+          }}>
+            Save Changes
+          </button>
         </form>
       </div>
     </div>

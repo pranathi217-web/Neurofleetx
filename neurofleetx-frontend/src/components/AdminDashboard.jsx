@@ -113,25 +113,24 @@ function AdminDashboard() {
         </div>
 
         <div className="analytics-section">
-          <h2>Revenue Trends</h2>
-          <div className="revenue-chart">
-            <div className="chart-bars">
-              {monthlyRevenue.map((revenue, index) => {
-                const maxRevenue = Math.max(...monthlyRevenue);
-                const height = (revenue / maxRevenue) * 100;
-                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-                return (
-                  <div key={index} className="bar-container">
-                    <div className="bar" style={{ height: `${height}%` }}>
-                      <span className="bar-value">₹{(revenue / 1000).toFixed(0)}k</span>
-                    </div>
-                    <span className="bar-label">{months[index]}</span>
-                  </div>
-                );
-              })}
-            </div>
+  <h2>Revenue Trends</h2>
+  <div className="revenue-chart">
+    <div className="chart-bars">
+      {monthlyRevenue.map((revenue, index) => {
+        const maxRevenue = Math.max(...monthlyRevenue);
+        const height = (revenue / maxRevenue) * 100;
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        return (
+          <div key={index} className="bar-container">
+            <span className="bar-value">₹{(revenue / 1000).toFixed(0)}k</span>
+            <div className="bar" style={{ height: `${height}%` }}></div>
+            <span className="bar-label">{months[index]}</span>
           </div>
-        </div>
+        );
+      })}
+    </div>
+  </div>
+</div>
 
         <div className="actions-section">
           <h2>Quick Actions</h2>
